@@ -1,7 +1,10 @@
 <template>
   <main class="login_content">
     <logo />
-    <LoginForm @submit="submit($event)"></LoginForm>
+    <LoginForm 
+      @submit="submit($event)"
+      :error="error"
+    ></LoginForm>
   </main>
 </template>
 
@@ -13,6 +16,12 @@ import LoginForm from '@/components/compositions/forms/login/LoginForm.vue'
 export default {
   name: 'LoginScreen',
   emits: ['submit'],
+  props: {
+    error: {
+      type: String,
+      default: ''
+    }
+  },
   components: {
     Logo,
     LoginForm

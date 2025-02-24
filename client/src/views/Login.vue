@@ -1,6 +1,9 @@
 <template>
   <div class="login_container">
-    <LoginScreen @submit="submit($event)"></LoginScreen>
+    <LoginScreen 
+      @submit="submit($event)"
+      :error="errorMessage"
+    ></LoginScreen>
   </div>
 </template>
 
@@ -14,13 +17,38 @@ export default {
   components: {
     LoginScreen
   },
+  data() {
+    return {
+      errorMessage: ''
+    }
+  },
   methods: {
-    submit(credentials) {
+    async submit(credentials) {
       console.log('credentials', credentials)
       const store = useUserStore()
-      store.login(() => {
-        this.$router.push({ name: 'home' })
-      })
+      try {
+        this.errorMessage = '' // Clear any previous error
+        const response = await fetch('http://localhost:3000/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: credentials.userName,
+            password: credentials.password
+          })
+        });
+        const data = await response.json();
+        if (data.access_token) {
+          store.login(() => {
+            this.$router.push({ name: 'home' })
+          })
+        } else {
+          this.errorMessage = 'Invalid credentials'
+        }
+      } catch (error) {
+        this.errorMessage = 'An error occurred during login'
+      }
     }
   }
 }

@@ -3,6 +3,7 @@
     <BaseInput v-model="userName" label="Username" />
     <BaseInput v-model="password" label="Password" type="password" />
     <BaseButton type="submit" fullWidth>Log in</BaseButton>
+    <div v-if="error" class="error-message">{{ error }}</div>
   </form>
 </template>
 
@@ -17,6 +18,12 @@ export default {
   components: {
     BaseInput,
     BaseButton
+  },
+  props: {
+    error: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
@@ -49,5 +56,18 @@ export default {
   gap: 20px;
   color: $ESSENTIALS_BLUE2;
   margin-block-start: 50px;
+}
+
+.error-message {
+  box-sizing: border-box;
+  color: crimson;
+  margin-top: 12px;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 8px 16px;
+  background-color: rgba(255, 59, 59, 0.1);
+  border-radius: 4px;
+  width: 100%;
+  font-weight: 500;
 }
 </style>
