@@ -13,8 +13,8 @@
       <h3 class="capitalize">{{ questionsLength }} questions</h3>
       <Jumbotron title="Get Ready" info="Once start you can't go back.">
         <div class="image_container">
-          <img src="@/assets/quiz-image-1.png" alt="" width="174" />
-          <img src="@/assets/quiz-image-2.png" alt="" width="174" />
+          <img src="@/assets/quiz-image-1.png" alt="" class="image" />
+          <img src="@/assets/quiz-image-2.png" alt="" class="image" />
         </div>
         <Badge class="badge"></Badge>
         <BaseButton :theme="BUTTON_THEMES.SECONDARY" @click="start">Start</BaseButton>
@@ -96,5 +96,10 @@ export default {
   background: white;
   border-radius: 50px;
   padding: 6px;
+}
+
+.image {
+  width: clamp(120px, 30vw, 174px);
+  height: auto;
 }
 </style>

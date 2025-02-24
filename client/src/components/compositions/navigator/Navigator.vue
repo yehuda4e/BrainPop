@@ -31,7 +31,7 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  right: 0;
   padding: 12px;
   display: flex;
   gap: 0.5rem;
