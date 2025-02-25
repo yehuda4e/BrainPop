@@ -1,3 +1,23 @@
+# Notes
+
+There is a seeder file, so after installation run:
+php artisan db:seed
+
+The default username and password are:
+username: test@example.com
+password: test
+
+# Other Notes
+
+- In order to make it work on a server we need to add the client to the server CORS
+- User can save only one quiz results at a time
+
+**Things I’ve done differently:**
+  - Implement each component in the quiz in different route
+  - Add an authorization check between routing
+  - Add Axios to add the authorization and the server address to the global object
+  - And other thing in general depends on a more specific characterization
+
 <img src="assets/instructions/logo.svg" width=300>
 <br>
 <br>
