@@ -28,10 +28,6 @@ export default {
 <style lang="scss" scoped>
 .navigation {
   background: teal;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
   padding: 12px;
   display: flex;
   gap: 0.5rem;
