@@ -24,7 +24,6 @@ export default {
   },
   methods: {
     async submit(credentials) {
-      console.log('credentials', credentials)
       const store = useUserStore()
       try {
         this.errorMessage = '' // Clear any previous error
@@ -41,6 +40,7 @@ export default {
         const data = await response.json();
         if (data.access_token) {
           store.login(() => {
+            localStorage.setItem('token', data.access_token)
             this.$router.push({ name: 'home' })
           })
         } else {
