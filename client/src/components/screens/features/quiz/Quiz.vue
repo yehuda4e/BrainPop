@@ -1,8 +1,9 @@
 <template>
   <div class="quiz_container">
     <div v-if="data">
-      <QuizStartScreen v-if="quizState === QUIZ_STATES.START" :name="data.name" :questionsLength="data.questions.length" @start="start"></QuizStartScreen>
-      <QuizQuestionsScreen v-if="quizState === QUIZ_STATES.QUESTIONS"></QuizQuestionsScreen>
+      <QuizStartScreen v-if="quizState === QUIZ_STATES.START" :name="data.name" :questionsLength="data.questions.length" @start="start" @finish="finish"></QuizStartScreen>
+      <QuizQuestionsScreen v-if="quizState === QUIZ_STATES.QUESTIONS" @finish="finish"></QuizQuestionsScreen>
+      <QuizSummeryScreen v-if="quizState === QUIZ_STATES.SUMMARY"></QuizSummeryScreen>
     </div>
     <div v-else>Loading...</div>
   </div>
@@ -11,18 +12,20 @@
 <script>
 import QuizStartScreen from './startScreen/QuizStartScreen.vue'
 import QuizQuestionsScreen from './questionsScreen/QuizQuestionsScreen.vue'
+import QuizSummeryScreen from './summeryScreen/QuizSummeryScreen.vue';
 
 const QUIZ_STATES = {
   START: 'start',
   QUESTIONS: 'questions',
-  RESULT: 'result'
+  SUMMARY: 'summary'
 }
 
 export default {
   name: 'Quiz',
   components: {
     QuizStartScreen,
-    QuizQuestionsScreen
+    QuizQuestionsScreen,
+    QuizSummeryScreen
   },
   props: {
     data: {
@@ -36,9 +39,12 @@ export default {
       quizState: QUIZ_STATES.START
     }
   },
-  methods: {
+  methods: { 
     start() {
       this.quizState = QUIZ_STATES.QUESTIONS
+    },
+    finish() {
+      this.quizState = QUIZ_STATES.SUMMARY
     }
   }
 }

@@ -17,7 +17,11 @@
           <img src="@/assets/quiz-image-2.png" alt="" class="image" />
         </div>
         <Badge class="badge"></Badge>
-        <BaseButton :theme="BUTTON_THEMES.SECONDARY" @click="start">Start</BaseButton>
+        <div class="button_container">
+          <BaseButton :theme="BUTTON_THEMES.SECONDARY" @click="start" v-if="quiz && quiz.length === 0">Start</BaseButton>
+          <BaseButton :theme="BUTTON_THEMES.SECONDARY" @click="viewResults" v-if="quiz && quiz.length > 0">View Results</BaseButton>
+          <BaseButton :theme="BUTTON_THEMES.OUTLINE" @click="start" v-if="quiz && quiz.length > 0">Retake Quiz</BaseButton>
+        </div>
       </Jumbotron>
     </main>
   </div>
@@ -38,11 +42,12 @@ import Navigator from '@/components/compositions/navigator/Navigator.vue'
 
 export default {
   name: 'QuizStartScreen',
-  emits: ['start'],
+  emits: ['start', 'finish'],
   components: { BaseButton, Jumbotron, BackgroundWave, Badge, Navigator },
 
   data() {
     return {
+      quiz: [],
       BUTTON_THEMES
     }
   },
@@ -53,12 +58,39 @@ export default {
     },
     questionsLength: {
       type: Number,
-      default: 10
+      default: 5
     }
+  },
+  created() {
+    this.fetchQuiz()
   },
   methods: {
     start() {
       this.$emit('start')
+    },
+    viewResults() {
+      this.$emit('finish')
+    },
+    async fetchQuiz() {
+      try {
+        const response = await fetch('http://localhost:3000/api/quiz', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        if (!response.ok) {
+          if (response.status === 401) {
+            this.$router.push({ name: 'login' })
+          }
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const data = await response.json()
+        this.quiz = data.quiz
+      } catch (error) {
+        localStorage.removeItem('token')
+        localStorage.removeItem('loggedIn')
+        console.error('Error fetching quiz:', error)
+      }
     }
   }
 }
@@ -67,15 +99,12 @@ export default {
 @import '@/utilities/css/vars/vars.scss';
 
 .start_container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   color: #343a41;
 }
 
 .start_content {
-  margin-block: 100px auto;
+  margin-block: 40px auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -101,5 +130,10 @@ export default {
 .image {
   width: clamp(120px, 30vw, 174px);
   height: auto;
+}
+
+.button_container {
+  display: flex;
+  gap: 1rem;
 }
 </style>
